@@ -112,7 +112,7 @@ $restode10=floor($totalMenosBase/10);
 
 $paga = 400 + ($restode10*200);
 
-echo "se paso del minimo  quedan ".$totalMenosBase." pagas ".$paga ;
+echo "<h2> Total a Pagar $".$paga ;
 }else{
 echo "Paga el Minimo";
 }
