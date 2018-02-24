@@ -44,114 +44,47 @@
                         @endphp
 
 
-                    <div class="panel-body">
-               <table class="table table-striped table-hover">
-                   <thead>
-                   <tr>
-                       <th>Fecha</th>
-                       <th>Operador</th>
-                       <th>Patente</th>
-                       <th>Hora</th>
-                       <th>Codigo</th>
-                       <th>Estado</th>
-                   <th colspan="3"></th>
+                                    <div class="panel-body">
+                                      <div class="panel-body">
+                                            <table class="table table-bordered" id="listahoy">
+                                                <thead>
+                                                       <tr>
+                                                           <th>Fecha</th>
+                                                           <th>Operador</th>
+                                                           <th>Patente</th>
+                                                           <th>Hora</th>
+                                                           <th>Codigo</th>
+                                                           <th>Estado</th>
+                                                           <th>Acciones</th>
 
-                   </tr>
-                   </thead>
+                                                       </tr>
+                                                </thead>
                    <tbody>
-                   @foreach($parking as $paking)
-                   <tr>
-                       @if($paking->fechaLlegada == $actual=date('Y-m-d'))
-                       <td>{{$paking->fechaLlegada}}</td>
-                       <td>{{$paking->operador}}</td>
-                       <td>{{$paking->patente}}</td>
 
-                       <td>{{$paking->horaLlegada}}</td>
-                       <td>{{$paking->codigo}}</td>
-                       <td>{{$paking->estado}}</td>
-
-                       <td><a href="{{route('parking.edit',$paking->id)}}" data-hover="tooltip" data-placement="top" data-target="#modal-edit-customers{{ $paking->id }}" data-toggle="modal" id="modal-edit" title="Edit">PAGAR</a></td>
-                      <!-- <td><a href="{{route('parking.edit',$paking->id)}}" class="btn btn-primary">Editar</a></td>-->
-                           @endif
-                       <div class="modal" id="modal-edit-customers{{$paking->id }}">
-                           <div class="row">
-                               <div class="col-md-8 col-md-offset-2">
-                                   <div class="panel panel-default">
-                                       <div class="panel-heading">
-                                           Pago
-                                       </div>
-
-                                       <div class="panel-body">
-
-                                    <h1>Patente {{$paking->patente}}</h1>
-
-
-@php
-
-$horaLlegada=$paking->horaLlegada;
-$horaActual= date('H:i');
-
-    $datetime1 = date_create($horaLlegada);
-    $datetime2 = date_create($horaActual);
-    $interval = date_diff($datetime1, $datetime2);
-    echo "<h2>Tiempo Total  ".$interval->format('%H horas %I Minutos')."</h2>";
-
-    $total;
-
-$horas=$interval->format('%h');
-$minutos=$interval->format('%I');
-
-$totalMinutos= ($horas*60)+$minutos;
-
-
-if ($totalMinutos>30){
-
-$totalMenosBase = $totalMinutos - 30;
-
-$restode10=floor($totalMenosBase/10);
-
-$paga = 400 + ($restode10*200);
-
-echo "<h2> Total a Pagar $".$paga ;
-}else{
-echo "Paga el Minimo";
-}
-
-
-$cobro1 = floor($totalMinutos/30);
-
-
-
-
-
-
-
-
-
-@endphp
-
-
-                                       </div>
-
-                                   </div>
-
-
-                               </div>
-                           </div>
-                       </div>
-
-
-
-                   </tr>
-                   @endforeach
                    </tbody>
                </table>
-                    {!! $parking->render() !!}
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+            <div class="modal fade" id="listadoHoyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="insertHere"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary">Reimprimir Ticket</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 @endsection

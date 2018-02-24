@@ -6,6 +6,7 @@ use App\Parking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Datatables;
 
 
 class ParkingController extends Controller
@@ -18,7 +19,7 @@ class ParkingController extends Controller
     public function index()
     {
 
-        $parking=Parking::orderBy('id','ASC')->paginate(7);
+        $parking=Parking::all();
 
 
         return view('parking.index',compact('parking'));
@@ -42,11 +43,6 @@ class ParkingController extends Controller
      */
     public function store(Request $request)
     {
-
-
-
-
-
         $parking = new Parking();
 
         $now = Carbon::now();
@@ -57,10 +53,6 @@ class ParkingController extends Controller
         $codigo=$cod1.$cod2;
         $patente = strtoupper($request->patente);
 
-
-
-
-
         $parking->fechaLlegada=$now->format('Y-m-d');
         $parking->operador=$user_id;
         $parking->patente=$patente;
@@ -70,6 +62,7 @@ class ParkingController extends Controller
         $parking->horaRetirada='00:00';
         $parking->total='0';
         $parking->tiempoTotal='0';
+
 
 
         $parking->save();
@@ -99,8 +92,8 @@ class ParkingController extends Controller
     public function edit(Parking $parking)
     {
 
-     $parking=Parking::all();
-        return view('parking.index',compact('parking'));
+
+        return view('parking.edit',compact('parking'));
     }
 
     /**
@@ -112,8 +105,17 @@ class ParkingController extends Controller
      */
     public function update(Request $request, Parking $parking)
     {
+        $parking = Parking::find($request);
+        $now = Carbon::now();
 
-        $parking->update($request->all());
+
+
+        $parking->estado='PAGADO';
+        $parking->horaRetirada=$now->format('H:i');
+        $parking->total='0';
+        $parking->tiempoTotal='0';
+
+        $parking->update();
 
 
 
@@ -129,5 +131,52 @@ class ParkingController extends Controller
     public function destroy(Parking $parking)
     {
         //
+    }
+    public function getIndex()
+    {
+        return view('listadototal');
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function anyData()
+    {
+        $now = Carbon::now();
+        $fechaLlegada=$now->format('Y-m-d');
+        $parking = \App\Parking::all()->where("fechaLlegada","=","$fechaLlegada");
+
+
+        //return Datatables::of($parking)->make(true);
+       return Datatables::of($parking)->toJson();
+
+
+        return $dataTable->make(true);
+    }
+
+    public function listado()
+    {
+        return view('listadototal');
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listadoJson()
+    {
+        $now = Carbon::now();
+        $fechaLlegada=$now->format('Y-m-d');
+        $parking = \App\Parking::all();
+
+
+        //return Datatables::of($parking)->make(true);
+        return Datatables::of($parking)->toJson();
+
+
+        return $dataTable->make(true);
     }
 }
