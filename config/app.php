@@ -177,7 +177,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Lord\Laroute\LarouteServiceProvider::class,
+        Tightenco\Ziggy\ZiggyServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Yajra\Datatables\ButtonsServiceProvider::class,
+
 
     ],
 
@@ -230,6 +235,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
 
     ],
 

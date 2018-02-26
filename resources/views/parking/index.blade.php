@@ -64,6 +64,7 @@
                    </tbody>
                </table>
 
+
                     </div>
                 </div>
             </div>
@@ -78,13 +79,16 @@
                         </div>
                         <div class="modal-body">
                             <div class="insertHere"></div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary">Reimprimir Ticket</button>
+
                         </div>
                     </div>
                 </div>
             </div>
+
+
 
 @endsection

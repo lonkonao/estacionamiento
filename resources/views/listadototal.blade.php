@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Dashboard</div>
                     <div class="panel-body">
@@ -16,7 +16,11 @@
                                 <th>Hora Llegada</th>
                                 <th>Codigo</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th>Hora Retirada</th>
+                                <th>Total</th>
+                                <th>Tiempo Total</th>
+
+
                             </tr>
                             </thead>
                         </table>

@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('parking','ParkingController');
@@ -27,6 +28,17 @@ Route::group(['middleware' => 'auth'], function () {
     //datatables todos
     Route::get('/listado','ParkingController@listado');
     Route::get('/listadoJson','ParkingController@listadoJson')->name('listado.jason');
+
+
+    //pdf
+//  Route::get('descargar-productos', 'ProductController@pdf')->name('products.pdf');
+    Route::get('ticketEstacionamiento/{id}', 'ParkingController@pdf1')->name('ticket.pdf');
+    Route::get('ticketTest/{id}', 'ParkingController@pdfTest')->name('ticket.test');
+
+
+
+
+
 
 
 

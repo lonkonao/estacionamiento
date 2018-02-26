@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Datatables;
+use Barryvdh\DomPDF\Facade as pdf;
 
 
 class ParkingController extends Controller
@@ -105,21 +106,32 @@ class ParkingController extends Controller
      */
     public function update(Request $request, Parking $parking)
     {
-        $parking = Parking::find($request);
-        $now = Carbon::now();
+        $estado=$request->estado;
 
 
 
-        $parking->estado='PAGADO';
-        $parking->horaRetirada=$now->format('H:i');
-        $parking->total='0';
-        $parking->tiempoTotal='0';
+        if ($estado=='PAGADO'){
 
-        $parking->update();
+            $pa = Parking::findOrfail($parking->id);
+
+            $pa->estado=$request->estado;
+            $pa->horaRetirada=$request->horaRetirada;
+            $pa->total=$request->total;
+            $pa->tiempoTotal=$request->totalTiempo;
+
+            //dd($pa);
+
+            $pa->save();
 
 
 
-        return redirect()->route('parking.index')->with('info','Fue Editado Exitosamente');
+            return redirect()->route('parking.index')->with('info','Guardado Con Exito');
+        }else{
+            return redirect()->route('parking.index')->with('info','No cambiaste el estado de pendiente a pagado');
+        }
+
+
+
     }
 
     /**
@@ -146,7 +158,7 @@ class ParkingController extends Controller
     {
         $now = Carbon::now();
         $fechaLlegada=$now->format('Y-m-d');
-        $parking = \App\Parking::all()->where("fechaLlegada","=","$fechaLlegada");
+        $parking = \App\Parking::all()->where("fechaLlegada","=","$fechaLlegada")->where("estado","=","PENDIENTE");
 
 
         //return Datatables::of($parking)->make(true);
@@ -177,6 +189,58 @@ class ParkingController extends Controller
         return Datatables::of($parking)->toJson();
 
 
-        return $dataTable->make(true);
+        return $dataTable->make(true)->parameter(['buttons' => ['postExcel', 'postCsv', 'postPdf'],]);
+    }
+    public function pdf1($id)
+    {
+        /**
+         * toma en cuenta que para ver los mismos
+         * datos debemos hacer la misma consulta
+         **/
+
+
+
+
+
+         $pa = Parking::findOrfail($id);
+
+
+       // $products = Product::all();
+
+       // $pdf = PDF::loadView('pdf.products', compact('products'));
+        $pdf = PDF::loadView('pdf.ticket',compact('pa'));
+
+
+
+      //  return $pdf->view('ticketD.pdf');
+
+        return $pdf->stream("ticketD.pdf", array("Attachment" => false));
+
+        exit(0);
+
+
+    }
+    public function pdfTest($id)
+    {
+        /**
+         * toma en cuenta que para ver los mismos
+         * datos debemos hacer la misma consulta
+         **/
+        $pa = Parking::findOrfail($id);
+
+
+        // $products = Product::all();
+
+        // $pdf = PDF::loadView('pdf.products', compact('products'));
+        $pdf = PDF::loadView('pdf.ticket',compact('pa'));
+
+
+        // return $pdf->view('ticketD.pdf');
+
+        return view('pdf.ticket',compact('pa'));
+
+
+
+
     }
 }

@@ -74,7 +74,7 @@
 
                                 <tr>
                                     <td><a href="{{route('parking.edit',$parking->id)}}" class="btn btn-success pull-right">Pagar</a></td>
-                                    <td><a href="#" class="btn btn-primary">Imprimir</a></td>
+                                    <td><a href="{{route('ticket.pdf',$parking->id)}}" class="btn btn-primary" target="_blank" >Imprimir</a></td>
                                     <td><a href="{{url()->previous()}}" class="btn btn-danger pull-left">Volver</a></td>
                                 </tr>
                             </tbody>

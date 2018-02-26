@@ -10,9 +10,15 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+
     <!-- Styles -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+    <script src="/js/laroute.js"></script>
+
+
+    <script>setTimeout('document.location.reload()',20000); </script>
 </head>
 <body>
     <div id="app">
@@ -38,13 +44,12 @@
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculos <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="/parking">Entrada</a></li>
-                                        <li><a href="#">Salida</a></li>
-                                        <li><a href="/listado">Listado de Vehiculos</a></li>
+                                        <li><a href="/listado">Historial</a></li>
                                     </ul>
                                 </li>
 
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Configuracion <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">Action</a></li>
                                         <li><a href="#">Another action</a></li>
@@ -98,9 +103,29 @@
     <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <!-- Bootstrap JavaScript -->
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
     <script>
         $(function() {
           var listahoy=  $('#listahoy').DataTable({
+              language: {
+                  "lengthMenu": "Mostrar _MENU_ Autos Por Pagina",
+                  "zeroRecords": "No Hay Vehiculos Estacionados Hoy",
+                  "info": "Mostrando Pagina _PAGE_ de _PAGES_",
+                  "infoEmpty": "0 Vehiculos",
+                  "infoFiltered": "(filtered from _MAX_ total records)",
+                  "search": "Buscar X Placa o Codigo",
+                  paginate: {
+                      "next": "Siguiente",
+                      "previous":"Anterior"
+
+                  }
+              },
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('datatables.data') !!}',
@@ -115,7 +140,8 @@
                         sortable: false,
                         "render": function ( data, type, full, meta ) {
                             var buttonID = full.id;
-                            return '<a href="parking/'+buttonID+'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>';
+                            return '<a href="parking/'+buttonID+'"><span class="glyphicon glyphicon-edit btn btn-default" aria-hidden="true"></span></a>' +
+                                   '<a href="ticketEstacionamiento/'+buttonID+'" target="_blank"><span class="glyphicon glyphicon-print btn btn-default" aria-hidden="true"></span></a>';
                         }
                     },
 
@@ -124,18 +150,28 @@
             $('#listahoy tbody').on( 'click', 'button', function () {
                 var data = listahoy.row($(this).parents('tr')).data();
                 //  alert( data['operador'] +"'s salary is: "+ data['operador'] );
+                var id = data['id'];
                 $('.insertHere').html(
+
+
+
                     // Adding and structuring the full data
                     '<table class="table dtr-details" width="100%">' +
                     '<tbody>' +
-                    '<tr><td>Hora Llegada<td><td>' + data['fechaLlegada'] + '</td></tr>' +
-                    '<tr><td>Operador<td><td>' + data['operador'] + '</td></tr>' +
-                    '<tr><td>Patente<td><td>' + data['patente'] + '</td></tr>' +
-                    '<tr><td>Hora Llegada<td><td>' + data['horaLlegada'] + '</td></tr>' +
-                    '<tr><td>Codigo<td><td>' + data['codigo'] + '</td></tr>' +
-                    '<tr><td>Estado<td><td>' + data['estado'] + '</td></tr>' +
+                    '<tr><td>ID</td><td id="idd">' + data['id'] + '</td></tr>' +
+                    '<tr><td>Hora Llegada</td><td>' + data['fechaLlegada'] + '</td></tr>' +
+                    '<tr><td>Operador</td><td>' + data['operador'] + '</td></tr>' +
+                    '<tr><td>Patente</td><td>' + data['patente'] + '</td></tr>' +
+                    '<tr><td>Hora Llegada</td><td>' + data['horaLlegada'] + '</td></tr>' +
+                    '<tr><td>Codigo</td><td>' + data['codigo'] + '</td></tr>' +
+                    '<tr><td>Estado</td><td>' + data['estado'] + '</td></tr>' +
                     '</tbody>' +
-                    '</table>'
+                    '</table> '+
+                    '<a href="#?id='+id+'"><span class="glyphicon glyphicon-edit btn btn-default" aria-hidden="true"></span></a>'
+
+
+
+
                 );
                 $('#listadoHoyModal').modal('show'); // calling the bootstrap modal
 
@@ -146,9 +182,30 @@
     <script>
         $(function() {
             var listadoTabla=$('#listado').DataTable({
+                dom: 'Blfrtip',
+                buttons: [
+                    'excelHtml5',
+
+                ],
+                language: {
+                    "lengthMenu": "Mostrar _MENU_ Autos Por Pagina",
+                    "zeroRecords": "No Hay Vehiculos Estacionados Hoy",
+                    "info": "Mostrando Pagina _PAGE_ de _PAGES_",
+                    "infoEmpty": "0 Vehiculos",
+                    "infoFiltered": "(filtered from _MAX_ total records)",
+                    "search": "Buscar X Placa o Codigo",
+                    paginate: {
+                        "next": "Siguiente",
+                        "previous":"Anterior"
+
+                    }
+                },
+
+                responsive: true,
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('listado.jason') !!}',
+
                 columns: [
                     { data: 'fechaLlegada', name: 'fechaLlegada' },
                     { data: 'operador', name: 'operador' },
@@ -156,12 +213,15 @@
                     { data: 'horaLlegada', name: 'horaLlegada' },
                     { data: 'codigo', name: 'codigo' },
                     { data: 'estado', name: 'estado' },
-                    {
+                    { data: 'horaRetirada', name: 'horaRetirada' },
+                    { data: 'total', name: 'total' },
+                    { data: 'tiempoTotal', name: 'tiempoTotal' },
+                   /* {
                         "targets": -1,
                         "data": null,
                         "defaultContent": "<button type='button' class='btn btn-default'><span class='glyphicon glyphicon-print' aria-hidden='true'></span></button>"
 
-                    },
+                    },*/
 
 
 
@@ -173,9 +233,12 @@
                 //  alert( data['operador'] +"'s salary is: "+ data['operador'] );
                 $('.insertHere').html(
                     // Adding and structuring the full data
+
+
                     '<table class="table dtr-details" width="100%">' +
                     '<tbody>' +
-                    '<tr><td>Hora Llegada<td><td>' + data['fechaLlegada'] + '</td></tr>' +
+                    '<tr><td>Hora Llegada<td><td>' + data['id'] + '</td></tr>' +
+                    '<tr><td>ID<td><td>' + data['id'] + '</td></tr>'+
                     '<tr><td>Operador<td><td>' + data['operador'] + '</td></tr>' +
                     '<tr><td>Patente<td><td>' + data['patente'] + '</td></tr>' +
                     '<tr><td>Hora Llegada<td><td>' + data['horaLlegada'] + '</td></tr>' +
@@ -192,7 +255,25 @@
     </script>
 
 <script>
+    document.getElementById("btnPrint").onclick = function () {
+        printElement(document.getElementById("printThis"));
+    }
 
+    function printElement(elem) {
+        var domClone = elem.cloneNode(true);
+
+        var $printSection = document.getElementById("printSection");
+
+        if (!$printSection) {
+            var $printSection = document.createElement("div");
+            $printSection.id = "printSection";
+            document.body.appendChild($printSection);
+        }
+
+        $printSection.innerHTML = "";
+        $printSection.appendChild(domClone);
+        window.print();
+    }
 
 </script>
 

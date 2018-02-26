@@ -46,18 +46,18 @@
 
                            <div class='form-group'>
                                {!! Form::label('horaRetirada','Hora Retirada') !!}
-                               {!! Form::text('horaRetirada',$datetime2->format('H:i'),['class'=>'form-control','readonly' => 'true']) !!}
+                               {!! Form::text('horaRetirada',$datetime2->format('H:i'),['class'=>'form-control','readonly'=>'true']) !!}
                            </div>
 
 
                             <div class="form-group">
                                 {!! Form::label('total','Total a Pagar $') !!}
-                                {!! Form::text('total',$paga,['class'=>'form-control','readonly' => 'true']) !!}
+                                {!! Form::text('total',$paga,['class'=>'form-control','readonly'=>'true']) !!}
                             </div>
 
                            <div class="form-group">
-                               {!! Form::label('total','Total Tiempo') !!}
-                               {!! Form::text('total',$interval->format('%H horas %I Minutos'),['class'=>'form-control','readonly' => 'true']) !!}
+                               {!! Form::label('totalTiempo','Total Tiempo') !!}
+                               {!! Form::text('totalTiempo',$interval->format('%H horas %I Minutos'),['class'=>'form-control','readonly'=>'true']) !!}
                            </div>
 
                            <div class="form-group">
@@ -66,7 +66,7 @@
                            </div>
 
                            <div class="form-group">
-                               <td>{!! Form::submit('Actualizar ',['class'=> 'btn btn-success pull-left']) !!}&nbsp;
+                               <td>{!! Form::submit('Actualizar',['class'=> 'btn btn-success pull-left']) !!}&nbsp;
 
                            <a href="{{url()->previous()}}" class="btn btn-danger pull-left">Volver</a></td>
                            {!! Form::close() !!}
