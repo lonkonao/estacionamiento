@@ -36,6 +36,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('ticketTest/{id}', 'ParkingController@pdfTest')->name('ticket.test');
 
 
+    //barcode
+
+    Route::get('barcode', 'ParkingController@barcode');
+
+
 
 
 

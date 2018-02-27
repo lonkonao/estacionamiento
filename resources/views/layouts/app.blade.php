@@ -96,6 +96,23 @@
         @yield('content')
     </div>
 
+    <!--Footer-->
+    <footer>
+
+
+
+        <!--Copyright-->
+        <div class="footer-copyright py-3 text-center">
+            <div class="container-fluid">
+                © 2018 Copyright: <a href="https://gcaceres.cl/"> Giovanni Caceres Rubio </a>
+            </div>
+        </div>
+        <!--/Copyright-->
+
+    </footer>
+    <!--/Footer-->
+
+
     <!-- Scripts -->
     <!-- jQuery -->
     <script src="http://code.jquery.com/jquery.js"></script>

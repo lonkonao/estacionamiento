@@ -20,10 +20,10 @@ class ParkingController extends Controller
     public function index()
     {
 
-        $parking=Parking::all();
+        $parking = Parking::all();
 
 
-        return view('parking.index',compact('parking'));
+        return view('parking.index', compact('parking'));
     }
 
     /**
@@ -39,7 +39,7 @@ class ParkingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -49,87 +49,83 @@ class ParkingController extends Controller
         $now = Carbon::now();
         $user_id = Auth::User()->name;
 
-        $cod1=$now->format('dm');
-        $cod2=$now->format('Hiss');
-        $codigo=$cod1.$cod2;
+        $cod1 = $now->format('dm');
+        $cod2 = $now->format('Hiss');
+        $codigo = $cod1 . $cod2;
         $patente = strtoupper($request->patente);
 
-        $parking->fechaLlegada=$now->format('Y-m-d');
-        $parking->operador=$user_id;
-        $parking->patente=$patente;
-        $parking->horaLlegada=$now->format('H:i');
-        $parking->codigo=$codigo;
-        $parking->estado='PENDIENTE';
-        $parking->horaRetirada='00:00';
-        $parking->total='0';
-        $parking->tiempoTotal='0';
-
+        $parking->fechaLlegada = $now->format('Y-m-d');
+        $parking->operador = $user_id;
+        $parking->patente = $patente;
+        $parking->horaLlegada = $now->format('H:i');
+        $parking->codigo = $codigo;
+        $parking->estado = 'PENDIENTE';
+        $parking->horaRetirada = '00:00';
+        $parking->total = '0';
+        $parking->tiempoTotal = '0';
 
 
         $parking->save();
 
 
-        return redirect()->route('parking.index')->with('info','Fue Creado Exitosamente');
+        return redirect()->route('parking.index')->with('info', 'Fue Creado Exitosamente');
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Parking  $parking
+     * @param  \App\Parking $parking
      * @return \Illuminate\Http\Response
      */
     public function show(Parking $parking)
     {
-        return view('parking.show',compact('parking'));
+        return view('parking.show', compact('parking'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Parking  $parking
+     * @param  \App\Parking $parking
      * @return \Illuminate\Http\Response
      */
     public function edit(Parking $parking)
     {
 
 
-        return view('parking.edit',compact('parking'));
+        return view('parking.edit', compact('parking'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Parking  $parking
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Parking $parking
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Parking $parking)
     {
-        $estado=$request->estado;
+        $estado = $request->estado;
 
 
-
-        if ($estado=='PAGADO'){
+        if ($estado == 'PAGADO') {
 
             $pa = Parking::findOrfail($parking->id);
 
-            $pa->estado=$request->estado;
-            $pa->horaRetirada=$request->horaRetirada;
-            $pa->total=$request->total;
-            $pa->tiempoTotal=$request->totalTiempo;
+            $pa->estado = $request->estado;
+            $pa->horaRetirada = $request->horaRetirada;
+            $pa->total = $request->total;
+            $pa->tiempoTotal = $request->totalTiempo;
 
             //dd($pa);
 
             $pa->save();
 
 
-
-            return redirect()->route('parking.index')->with('info','Guardado Con Exito');
-        }else{
-            return redirect()->route('parking.index')->with('info','No cambiaste el estado de pendiente a pagado');
+            return redirect()->route('parking.index')->with('info', 'Guardado Con Exito');
+        } else {
+            return redirect()->route('parking.index')->with('info', 'No cambiaste el estado de pendiente a pagado');
         }
-
 
 
     }
@@ -137,13 +133,14 @@ class ParkingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Parking  $parking
+     * @param  \App\Parking $parking
      * @return \Illuminate\Http\Response
      */
     public function destroy(Parking $parking)
     {
         //
     }
+
     public function getIndex()
     {
         return view('listadototal');
@@ -157,12 +154,12 @@ class ParkingController extends Controller
     public function anyData()
     {
         $now = Carbon::now();
-        $fechaLlegada=$now->format('Y-m-d');
-        $parking = \App\Parking::all()->where("fechaLlegada","=","$fechaLlegada")->where("estado","=","PENDIENTE");
+        $fechaLlegada = $now->format('Y-m-d');
+        $parking = \App\Parking::all()->where("fechaLlegada", "=", "$fechaLlegada")->where("estado", "=", "PENDIENTE");
 
 
         //return Datatables::of($parking)->make(true);
-       return Datatables::of($parking)->toJson();
+        return Datatables::of($parking)->toJson();
 
 
         return $dataTable->make(true);
@@ -181,7 +178,7 @@ class ParkingController extends Controller
     public function listadoJson()
     {
         $now = Carbon::now();
-        $fechaLlegada=$now->format('Y-m-d');
+        $fechaLlegada = $now->format('Y-m-d');
         $parking = \App\Parking::all();
 
 
@@ -191,6 +188,7 @@ class ParkingController extends Controller
 
         return $dataTable->make(true)->parameter(['buttons' => ['postExcel', 'postCsv', 'postPdf'],]);
     }
+
     public function pdf1($id)
     {
         /**
@@ -199,20 +197,16 @@ class ParkingController extends Controller
          **/
 
 
+        $pa = Parking::findOrfail($id);
 
 
+        // $products = Product::all();
 
-         $pa = Parking::findOrfail($id);
-
-
-       // $products = Product::all();
-
-       // $pdf = PDF::loadView('pdf.products', compact('products'));
-        $pdf = PDF::loadView('pdf.ticket',compact('pa'));
+        // $pdf = PDF::loadView('pdf.products', compact('products'));
+        $pdf = PDF::loadView('pdf.ticket', compact('pa'));
 
 
-
-      //  return $pdf->view('ticketD.pdf');
+        //  return $pdf->view('ticketD.pdf');
 
         return $pdf->stream("ticketD.pdf", array("Attachment" => false));
 
@@ -220,6 +214,7 @@ class ParkingController extends Controller
 
 
     }
+
     public function pdfTest($id)
     {
         /**
@@ -232,15 +227,18 @@ class ParkingController extends Controller
         // $products = Product::all();
 
         // $pdf = PDF::loadView('pdf.products', compact('products'));
-        $pdf = PDF::loadView('pdf.ticket',compact('pa'));
+        $pdf = PDF::loadView('pdf.ticket', compact('pa'));
 
 
         // return $pdf->view('ticketD.pdf');
 
-        return view('pdf.ticket',compact('pa'));
+        return view('pdf.ticket', compact('pa'));
 
 
+    }
 
-
+    public function barcode()
+    {
+        return view('barcode');
     }
 }

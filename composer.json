@@ -12,6 +12,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "lord/laroute": "2.*",
+        "milon/barcode": "^5.3",
         "tightenco/ziggy": "^0.6.2",
         "yajra/laravel-datatables-buttons": "2.0",
         "yajra/laravel-datatables-oracle": "~8.0"
