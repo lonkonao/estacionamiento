@@ -12,6 +12,24 @@ Creado por la necesidad de llevar un control de manera remota de un estacionamie
 
 - Entrega Ticket
 - Trabaja con BarCode
+- Impresiones de ticket 
+
+
+
+Entrega de ingresos monetarios por turnos con voucher de nombre y horarios
+
+
+
+<h1><b> ! ! ! ! ! P r o y e c t o   D e s a c t u a l i z a d o ¡ ¡ ¡ ¡ ¡ </b></h1>
+
+
+cierre estacionamiento 
+
+
+
+
+
+
 
 ## Contributing
 
